@@ -1,0 +1,56 @@
+record(ai, "$(user):T1"){
+  field(DESC,"T Cerveja")
+  field(SCAN,"10 second")
+  field(INP,"@arduino.proto get_temp1() $(PORT)")
+  field(DTYP,"stream")
+  field(EGU,"DegC")
+  field(LOPR, "0")
+  field(HOPR, "50")
+}
+
+record(ai, "$(user):T2"){
+  field(DESC,"T ar Frigo")
+  field(SCAN,"10 second")
+  field(INP,"@arduino.proto get_temp2() $(PORT)")
+  field(DTYP,"stream")
+  field(EGU,"DegC")
+  field(LOPR, "0")
+  field(HOPR, "50")
+}
+
+record(ai, "$(user):T3"){
+  field(DESC,"T ar exterior")
+  field(SCAN,"10 second")
+  field(INP,"@arduino.proto get_temp3() $(PORT)")
+  field(DTYP,"stream")
+  field(EGU,"DegC")
+  field(LOPR, "0")
+  field(HOPR, "50")
+}
+
+record(longout, "$(user):duty"){
+  field(DESC,"Duty Cycle (permilagem)")
+  field(DTYP,"stream")
+  field(OUT, "@arduino.proto set_duty() $(PORT)")
+  field(EGU,"Permilagem")
+  field(LOPR, "0")
+  field(HOPR, "1000")
+}
+
+record(longout, "$(user):period"){
+  field(DESC,"Período total (em s)")
+  field(DTYP,"stream")
+  field(OUT, "@arduino.proto set_period() $(PORT)")
+  field(EGU,"s")
+  field(LOPR, "0")
+  field(HOPR, "10000000")
+}
+
+
+record(ao, "$(user):ref"){
+  field(DESC,"T Referencia")
+  field(EGU,"DegC")
+  field(LOPR, "0")
+  field(HOPR, "50")
+}
+
