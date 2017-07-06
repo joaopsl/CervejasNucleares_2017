@@ -1,3 +1,6 @@
+/***************** TODO ******************/
+/*        RELE ESTÁ LIGADO A LOW         */
+
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
@@ -13,13 +16,12 @@
 // Temperature is measured every 1000 milliseconds
 #define TEMP_INTERVAL 1000
 
-// Duty cycle is 60 minutes
-// #define DUTY_CYCLE 3600000
-
-#define DUTY_CYCLE 1800000
-
-// Rele is on for 5 seconds every 60 minutes by default
-#define DEFAULT_ON_TIME 300000
+// Period is 60 minutes by default
+// #define DEFAULT_PERIOD 3600000
+#define DEFAULT_PERIOD 30000
+ 
+// Rele is on for 10% of the period by default
+#define DEFAULT_ON_TIME 0.1*DEFAULT_PERIOD
 
 // Setup a OneWire instance to communicate with any OneWire devices
 OneWire oneWire(ONE_WIRE_BUS);
@@ -41,7 +43,9 @@ bool RELE_state = 0; // Rele state
 unsigned long prevTime; // Last time the temperature was updated
 unsigned long prevTime2; // Last time the rele was updated
 unsigned long onTime = DEFAULT_ON_TIME;
-unsigned long onTime_next = 300000;
+unsigned long onTime_next = DEFAULT_ON_TIME;
+unsigned long period = DEFAULT_PERIOD;
+unsigned long period_next = DEFAULT_PERIOD;
 
 void setup (void) {
   // Start serial port
@@ -93,33 +97,23 @@ void serial_protocol() {
             input="";
             break;
 
-         // Request to turn the rele off
-        case 'L':
-          RELE_state = 0;
-          input="";
-          break;
-
-        // Request to turn the rele on
-        case 'H':
-          RELE_state = 1;
-          input="";
-          break;
-
-        // Request for the rele state
-        case 'S':
-          Serial.print("S=");
-          Serial.print(String(RELE_state));
-          Serial.print("\r\n");
+        // Order for new period
+        case 'P':
+          input = input.substring(2); // Format is P=___
+          
+          period_next = input.toInt() * 1000; // Convert to milliseconds
+          
           input = "";
           break;
-
+          
+        // Order for new on time
         case 'D':
           input = input.substring(2); // Format is D=___
 
-          // if new duty cycle is less than 1 hour
-          if (input.toInt() < DUTY_CYCLE / 1000) {
+          // if new on time is between 0 and 1000
+          if (input.toInt() >= 0 && input.toInt() <= 1000) {
+            //onTime_next = (input.toInt()/1000)*period;
             onTime_next = input.toInt();
-            onTime_next = onTime_next * 1000; // Convert to milliseconds
           }
           
           input = "";
@@ -159,29 +153,57 @@ void loop (void) {
   if (currentTime - prevTime2 > onTime) {
 
     if (RELE_state == 1) {
-//      Serial.print("desliguei ");
-//      Serial.print(currentTime/1000);
-//      Serial.print("\r\n");
       digitalWrite(LED_BUILTIN, LOW);
-      digitalWrite(RELE, LOW);
+      digitalWrite(RELE, HIGH); // Rele is off when pin is HIGH
+//      Serial.print("desliguei: currentTime: ");
+//      Serial.print(currentTime/1000);
+//      Serial.print(" period: ");
+//      Serial.print(period/1000);
+//      Serial.print(" duty cycle: ");
+//      Serial.print(onTime/1000);
+//      Serial.print("\r\n");
+      
       RELE_state = 0;
     }
 
-    // If DUTY_CYCLE has passed, update onTime for the next hour
-    if (currentTime - prevTime2 > DUTY_CYCLE) {
+    // If period has passed, update onTime for the next hour
+    if (currentTime - prevTime2 > period) {
       prevTime2 = currentTime;
-      onTime = onTime_next;
+
+      if (onTime_next != onTime) {
+        onTime = (onTime_next*period)/1000;
+//        Serial.print("actualizei o onTime: ");
+//        Serial.print(onTime/1000);
+//        Serial.print("\r\n");
+      }
+
+      // Change time to adapt to next period
+      if (period_next != period) {
+        onTime = (onTime*1000)/period; // Convert to permillage
+        period = period_next;
+        onTime = (onTime*period)/1000; // Convert back to milliseconds mantaining the proportions
+        onTime_next = onTime;
+//        Serial.print("actualizei o periodo: ");
+//        Serial.print(period/1000);
+//        Serial.print(" actualizei o onTime: ");
+//        Serial.print(onTime/1000);
+//        Serial.print("\r\n");
+      }
     }
     
   } else {
     
     if (RELE_state == 0) {
-//      Serial.print("liguei ");
-//      Serial.print(currentTime/1000);
-//      Serial.print("\r\n");
       digitalWrite(LED_BUILTIN, HIGH);
+      digitalWrite(RELE, LOW); // Rele is on when pin is LOW
+//      Serial.print("liguei: currentTime: ");
+//      Serial.print(currentTime/1000);
+//      Serial.print(" period: ");
+//      Serial.print(period/1000);
+//      Serial.print(" duty cycle: ");
+//      Serial.print(onTime/1000);
+//      Serial.print("\r\n");
       RELE_state = 1;
-      digitalWrite(RELE, HIGH);
     }
   }
 }
