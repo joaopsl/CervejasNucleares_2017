@@ -1,0 +1,28 @@
+Terminator = LF;
+get_temp1 {
+    out "T";
+    in "T1=%f, T2=%*f, T3=%*f";
+    ExtraInput = Ignore;
+}
+
+get_temp2 {
+    out "T";
+    in "T1=%*f, T2=%f, T3=%*f";
+    ExtraInput = Ignore;
+}
+
+get_temp3 {
+    out "T";
+    in "T1=%*f, T2=%*f, T3=%f";
+    ExtraInput = Ignore;
+}
+
+set_duty {
+    out "D=%d\n";
+    ExtraInput = Ignore;
+}
+
+set_period {
+    out "P=%d\n";
+    ExtraInput = Ignore;
+}
