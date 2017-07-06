@@ -163,6 +163,7 @@ void loop (void) {
 //      Serial.print(currentTime/1000);
 //      Serial.print("\r\n");
       digitalWrite(LED_BUILTIN, LOW);
+      digitalWrite(RELE, LOW);
       RELE_state = 0;
     }
 
@@ -180,6 +181,7 @@ void loop (void) {
 //      Serial.print("\r\n");
       digitalWrite(LED_BUILTIN, HIGH);
       RELE_state = 1;
+      digitalWrite(RELE, HIGH);
     }
   }
 }
