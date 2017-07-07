@@ -5,14 +5,14 @@
 
 < envPaths
 
-epicsEnvSet(STREAM_PROTOCOL_PATH,"/home/pi/EPICS/BeerPi/BeerPiIOCApp/Db/")
-#epicsEnvSet(STREAM_PROTOCOL_PATH,"BeerPiIOCApp/Db")
+epicsEnvSet(STREAM_PROTOCOL_PATH,"/home/pi/BeerGit/CervejasNucleares_2017/RPi/BeerPiIOCApp/Db/")
 
 
 #epicsEnvSet(STREAM_PROTOCOL_PATH,".:../protocols")
 
 
-cd "/home/pi/EPICS/BeerPi"
+cd "/home/pi/BeerGit/CervejasNucleares_2017/RPi/"
+#epicsEnvSet(STREAM_PROTOCOL_PATH,"BeerPiIOCApp/Db")
 
 ## Register all support components
 dbLoadDatabase "dbd/BeerPiIOC.dbd"
@@ -31,7 +31,7 @@ asynSetOption("SERIALPORT",-1,"crtscts","N")
 ## Load record instances
 dbLoadRecords("db/brew.db","user=BeerPi,PORT='SERIALPORT'")
 
-cd "/home/pi/EPICS/BeerPi/iocBoot/iocBeerPiIOC"
+cd "/home/pi/BeerGit/CervejasNucleares_2017/RPi/iocBoot/iocBeerPiIOC"
 iocInit
 
 ## Start any sequence programs

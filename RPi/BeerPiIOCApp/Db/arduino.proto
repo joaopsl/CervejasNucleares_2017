@@ -1,19 +1,22 @@
 Terminator = LF;
 get_temp1 {
     out "T";
-    in "T1=%f, T2=%*f, T3=%*f";
+    in "T1=%f, T2=%*f, T3=%*f, S=%*d";
     ExtraInput = Ignore;
 }
 
 get_temp2 {
-    out "T";
-    in "T1=%*f, T2=%f, T3=%*f";
+    in "T1=%*f, T2=%f, T3=%*f, S=%*d";
     ExtraInput = Ignore;
 }
 
 get_temp3 {
-    out "T";
-    in "T1=%*f, T2=%*f, T3=%f";
+    in "T1=%*f, T2=%*f, T3=%f, S=%*d";
+    ExtraInput = Ignore;
+}
+
+get_relay {
+    in "T1=%*f, T2=%*f, T3=%*f, S=%d";
     ExtraInput = Ignore;
 }
 

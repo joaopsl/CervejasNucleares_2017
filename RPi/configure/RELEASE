@@ -23,6 +23,11 @@ TEMPLATE_TOP=$(EPICS_BASE)/templates/makeBaseApp/top
 
 # If using the sequencer, point SNCSEQ at its top directory:
 #SNCSEQ=$(EPICS_BASE)/../modules/soft/seq
+SUPPORT=/usr/local/epics/synApps_5_8/support
+
+AUTOSAVE=$(SUPPORT)/autosave-5-6-1
+ASYN=$(SUPPORT)/asyn-4-26
+STREAM=$(SUPPORT)/stream-2-6a
 
 # EPICS_BASE usually appears last so other apps can override stuff:
 EPICS_BASE=/usr/local/epics/base
@@ -31,5 +36,5 @@ EPICS_BASE=/usr/local/epics/base
 # other than EPICS_BASE:
 #RULES=/path/to/epics/support/module/rules/x-y
 
-ASYN=/usr/local/epics/modules/asyn
-STREAM=/usr/local/epics/modules/stream
+#ASYN=/usr/local/epics/modules/asyn
+#STREAM=/usr/local/epics/modules/stream
