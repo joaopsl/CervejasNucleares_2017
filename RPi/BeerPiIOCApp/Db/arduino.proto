@@ -29,3 +29,8 @@ set_period {
     out "P=%d\n";
     ExtraInput = Ignore;
 }
+
+reset {
+    out "O";
+    ExtraInput = Ignore;
+}

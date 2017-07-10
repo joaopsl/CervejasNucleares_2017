@@ -1,0 +1,105 @@
+record(ai, "$(user):Tbeer"){
+  field(DESC,"T Cerveja")
+  field(SCAN,"2 second")
+  field(INP,"@arduino.proto get_temp1() $(PORT)")
+  field(DTYP,"stream")
+  field(EGU,"DegC")
+  field(LOPR, "0")
+  field(HOPR, "40")
+  field(FLNK, "$(user):Terror PP NMS")
+}
+
+record(ai, "$(user):Tfrigo"){
+  field(DESC,"T ar Frigo")
+  field(SCAN,"I/O Intr")
+  field(INP,"@arduino.proto get_temp2() $(PORT)")
+  field(DTYP,"stream")
+  field(EGU,"DegC")
+  field(LOPR, "0")
+  field(HOPR, "50")
+}
+
+record(ai, "$(user):Text"){
+  field(DESC,"T ar exterior")
+  field(SCAN,"I/O Intr")
+  field(INP,"@arduino.proto get_temp3() $(PORT)")
+  field(DTYP,"stream")
+  field(EGU,"DegC")
+  field(LOPR, "0")
+  field(HOPR, "50")
+}
+
+record(longout, "$(user):DutyCycle"){
+  field(DESC,"Duty Cycle (permilagem)")
+  field(DTYP,"stream")
+  field(OUT, "@arduino.proto set_duty() $(PORT)")
+  field(EGU,"Permilagem")
+  field(LOPR, "0")
+  field(HOPR, "1000")
+  field(VAL, "500")
+  field(PINI, "YES")
+}
+
+record(longout, "$(user):Period"){
+  field(DESC,"Período total (em s)")
+  field(DTYP,"stream")
+  field(OUT, "@arduino.proto set_period() $(PORT)")
+  field(EGU,"s")
+  field(LOPR, "0")
+  field(HOPR, "36000")
+  field(VAL, "120")
+  field(PINI, "YES")
+}
+
+record(ao, "$(user):Tref"){
+  field(DESC,"T Referencia")
+  field(EGU,"DegC")
+  field(	LOPR, "5")
+  	field(HOPR, "25")
+  	field(VAL, "18")
+  	field(PINI, "YES")
+  	field(ASG," critical")
+}
+
+
+record(bi, "$(user):Relay"){
+  	field(DESC,"Relay")
+  	field(DTYP, "stream")
+  	field(SCAN, "I/O Intr")
+  	field(ZNAM, "OFF")
+  	field(ONAM, "ON")
+  	field(INP,"@arduino.proto get_relay() $(PORT)")
+}
+
+record(calc, "$(user):Terror"){
+  	field(DESC, "cálculo do erro")
+	#field(SCAN,"10 second")
+  	field(CALC, "A-B")
+  	field(INPA, "$(user):Tref.VAL  NPP NMS")
+  	field(INPB, "$(user):Tbeer.VAL  NPP NMS")
+  	field(EGU, "DegC")
+}
+
+record(calc, "$(user):CalcInt"){
+  	field(DESC, "calcula o valor do integral") 
+  	#field(FLNK, "$(user):aiExample")
+  	field(CALC, "  A+B* C")
+  	field(INPA, "$(user):CalcInt.VAL  NPP NMS")
+  	field(INPB, "$(user):Terror.VAL ")
+  	field(INPC, "$(user):Period.VAL")
+  	field(EGU, "DegC")
+ }
+ 
+ record(ao, "$(user):Kp"){
+ 	field(DESC, "valor da constante de proporcional de PID")
+	field(HOPR, "100")
+	field(LOPR, "-100")
+	field(ASG, "critical")
+ }
+ 
+ record(ao, "$(user):Ki"){
+        field(DESC, "valor da constante de integral de PID")  
+	field(HOPR, "100")
+	field(LOPR, "-100")
+	field(ASG, "critical")
+ }

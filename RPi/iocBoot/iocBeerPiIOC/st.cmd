@@ -31,6 +31,7 @@ asynSetOption("SERIALPORT",-1,"crtscts","N")
 ## Load record instances
 dbLoadRecords("db/brew.db","user=BeerPi,PORT='SERIALPORT'")
 
+asSetFilename("/home/pi/BeerGit/CervejasNucleares_2017/RPi/accessPV.acf")
 cd "/home/pi/BeerGit/CervejasNucleares_2017/RPi/iocBoot/iocBeerPiIOC"
 iocInit
 
