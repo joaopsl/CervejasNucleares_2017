@@ -1,12 +1,12 @@
 import epics
 
-from time import *
+#from time import *
 
 def application(environ,start_response):
     value  = epics.caget('BeerPi:Tbeer')
     value2 = epics.caget('BeerPi:Tfrigo')
     value3 = epics.caget('BeerPi:Text')
-    now = ctime()
+    #now = ctime()
 
     status = '200 OK'
     html = '<html>\n' \
