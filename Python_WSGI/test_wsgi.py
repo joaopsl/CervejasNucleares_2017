@@ -23,6 +23,8 @@ def application(environ,start_response):
            'Fridge Temperature: ' + str(value2)+ ' Deg\n' \
 	   '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
            'Outside Temperature: ' + str(value3)+ ' Deg\n' \
+	   '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
+            'Current Time: ' +now+ '\n' \
            '</div>\n' \
            '</body>\n' \
            '</html>\n'
