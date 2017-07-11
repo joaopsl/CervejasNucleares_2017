@@ -1,6 +1,6 @@
 record(ai, "$(user):Tbeer"){
   	field(DESC,"Temp Cerveja")
-  	field(SCAN,"2 second")
+#  	field(SCAN,"2 second")
  	field(INP,"@arduino.proto get_temp1() $(PORT)")
  	field(DTYP,"stream")
  	field(EGU,"DegC")
@@ -10,7 +10,11 @@ record(ai, "$(user):Tbeer"){
 	field(LOW, "17")
 	field(HIGH, "19")
 	field(HIHI, "20")
-  	field(FLNK, "$(user):Terror PP NMS")
+	field(LLSV, "MAJOR")
+	field(LSV,  "MINOR")
+	field(HSV,  "MINOR")
+	field(HHSV, "MAJOR")
+#  	field(FLNK, "$(user):Terror PP NMS")
 	field(PREC, "2")
 	field(ADEL, "0.1")
 }
@@ -27,50 +31,40 @@ record(ai, "$(user):Tfrigo"){
         field(LOW, "16")
         field(HIGH, "20")
         field(HIHI, "22")
+	field(LLSV, "MAJOR")
+	field(LSV,  "MINOR")
+	field(HSV,  "MINOR")
+	field(HHSV, "MAJOR")
 	field(PREC, "2")
 	field(ADEL, "0.1")
 	field(FLNK, "$(user):CircularBuffer PP NMS")
 }
 
 record(ai, "$(user):Text"){
-  	field(DESC,"Temp ar exterior")
-  	field(SCAN,"I/O Intr")
+  	field(DESC, "Temp ar exterior")
+  	field(SCAN, "I/O Intr")
   	field(INP,"@arduino.proto get_temp3() $(PORT)")
-  	field(DTYP,"stream")
-  	field(EGU,"DegC")
+  	field(DTYP, "stream")
+  	field(EGU, "DegC")
   	field(LOPR, "0")
   	field(HOPR, "50")
 	field(LOLO, "20")
-        field(LOW, "22")
+        field(LOW,  "22")
         field(HIGH, "26")
         field(HIHI, "28")
+	field(LLSV, "MAJOR")
+	field(LSV,  "MINOR")
+	field(HSV,  "MINOR")
+	field(HHSV, "MAJOR")
 	field(PREC, "2")
 	field(ADEL, "0.1")
-}
-
-record(longout, "$(user):DutyCycle"){
-  	field(DESC,"Duty Cycle (permilagem)")
-  	field(DTYP,"stream")
-  	field(OUT, "@arduino.proto set_duty() $(PORT)")
-  	field(EGU,"Permilagem")
-#Drive High/low Limits
-  	field(DRVH,"1000")
-  	field(DRVL,"100")
-  	field(LOPR, "0")
-  	field(HOPR, "1000")
-  	field(VAL, "200")
-  	field(PINI, "YES")
-	field(OMSL, "supervisory") 
-	field(DOL,  "$(user):CalcPID NPP NMS")
-	field(ASG, "critical")
-	field(ADEL, "1")
 }
 
 record(longout, "$(user):Period"){
   	field(DESC,"Período total (em s)")
   	field(DTYP,"stream")
   	field(OUT, "@arduino.proto set_period() $(PORT)")
-  	field(EGU,"s")
+  	field(EGU, "s")
 #Drive High/low Limits
   	field(DRVH,"7200")
   	field(DRVL,"600")
@@ -83,7 +77,7 @@ record(longout, "$(user):Period"){
 }
 
 record(ao, "$(user):Tref"){
-  	field(DESC,"Temp  Referencia")
+  	field(DESC,"Temp Referencia")
   	field(EGU,"DegC")
 	field(PREC, "2")
   	field(LOPR, "5")
@@ -107,10 +101,10 @@ record(bi, "$(user):Relay"){
 
 record(calc, "$(user):Terror"){
  	field(DESC, "calculo do erro")
-	field(FLNK, "$(user):CalcInt")
+#	field(FLNK, "$(user):CalcInt")
  	field(CALC, "A-B")
- 	field(INPA, "$(user):Tref.VAL  NPP NMS")
-  	field(INPB, "$(user):Tbeer.VAL  NPP NMS")
+ 	field(INPA, "$(user):Tref.VAL NPP NMS")
+  	field(INPB, "$(user):Tbeer.VAL PP NMS")
   	field(EGU, "DegC")
 	field(ADEL, "0.05")
 	field(PREC, "2")
@@ -118,14 +112,13 @@ record(calc, "$(user):Terror"){
         field(LOW, "17.5")
         field(HIGH, "18.5")
         field(HIHI, "19")
-
 }
 record(calc, "$(user):CalcInt"){
         field(DESC, "calcula o valor do integral") 
-	field(FLNK, "$(user):CalcPID PP NMS")
-        field(CALC, "  A+B*C")
+#	field(FLNK, "$(user):CalcPID PP NMS")
+        field(CALC, "A + B*C")
         field(INPA, "$(user):CalcInt.VAL  NPP NMS")
-        field(INPB, "$(user):Terror.VAL")
+        field(INPB, "$(user):Terror.VAL PP NMS")
 #        field(INPC, "$(user):Period.VAL")
         field(INPC, "2")
 	field(PREC, "2")
@@ -135,45 +128,77 @@ record(calc, "$(user):CalcInt"){
  
 record(ao, "$(user):Kp"){
          field(DESC, "constante de Kp de PID")
-	 field(HOPR, "100")
-	 field(LOPR, "-100")
-  	 field(VAL, "0.0")
+	 field(HOPR, "1000")
+	 field(LOPR, "-1000")
+  	 field(VAL, "10.0")
+	 field(PREC, "2")
   	 field(PINI, "YES")
 	 field(ASG, "critical")
 }
  
 record(ao, "$(user):Ki"){
          field(DESC, "constante de integral de PID")  
-	 field(HOPR, "100")
-	 field(LOPR, "-100")
+	 field(HOPR, "1000")
+	 field(LOPR, "-1000")
   	 field(VAL, "0.0")
+	 field(PREC, "2")
   	 field(PINI, "YES")
 	 field(ASG, "critical")
 }
 
 record(calc, "$(user):CalcPID"){
         field(DESC, "calcula o valor do atuador") 
-        field(CALC, "  A*B + C*D + E")
-        field(INPA, "$(user):Kp.VAL  NMS")
-        field(INPB, "$(user):Terror.VAL NMS ")
-        field(INPC, "$(user):Ki.VAL NMS ")
-	field(INPD, "$(user):CalcInt.VAL NMS")
+        field(CALC, "A*B + C*D + E")
+#  	field(SCAN, "2 second")
+        field(INPA, "$(user):Kp.VAL NPP  NMS")
+        field(INPB, "$(user):Terror.VAL NPP NMS")
+        field(INPC, "$(user):Ki.VAL NPP NMS")
+	field(INPD, "$(user):CalcInt.VAL PP NMS")
 	field(INPE, "200")
-	field(FLNK, "$(user):DutyCycle PP NMS")
+#	field(FLNK, "$(user):DutyCycle PP NMS")
 	#field(DRVL, "0")
-	#field(DRVH,"1000")
+	#field(DRVH, "1000")
+	field(ADEL,  "1")
+}
+record(calc, "$(user):LimitPID"){
+        field(DESC, "Limita o Valor do atuador") 
+  	field(SCAN, "2 second")
+        field(CALC, "(A<B)? 0: A")
+	field(INPA, "$(user):CalcPID.VAL PP NMS")
+	field(INPB, "100")
+	field(FLNK, "$(user):DutyCycle")
+	#field(DRVL, "0")
+}
+record(longout, "$(user):DutyCycle"){
+  	field(DESC,"Duty Cycle (permilagem)")
+#  	field(SCAN,"2 second")
+  	field(DTYP,"stream")
+  	field(OUT, "@arduino.proto set_duty() $(PORT)")
+  	field(EGU, "o/oo")
+#Drive High/low Limits
+  	field(DRVH, "1000")
+  	field(DRVL, "0")
+  	field(LOPR, "0")
+  	field(HOPR, "1000")
+  	field(VAL, "200")
+  	field(PINI, "YES")
+	field(OMSL, "supervisory") 
+	field(DOL,  "$(user):LimitPID NPP NMS")
+	field(ASG, "critical")
 	field(ADEL, "1")
 }
 
-record(calcout, "$(user):ResetCycle"){
+record(bo, "$(user):ResetCycle"){
 
 	field(DESC, "Recomeça um ciclo")
 	field(DTYP, "stream")
-	field(CALC, "0")
+#	field(CALC, "0")
 	field(OUT, "@arduino.proto reset() $(PORT)")
 	field(ASG, "critical")
+  	field(ZNAM, "OFF")
+  	field(ONAM, "ON")
 	field(VAL, "0")
-	field(OOPT, "On Change")
+#	field(OOPT, "On Change")
 }
 
 record(compress, "$(user):TAverage"){
@@ -190,7 +215,7 @@ record(compress, "$(user):TAverage"){
 
 record(compress,"$(user):CircularBuffer"){
 	field(DESC, "Cria um buffer circular")
-	field(INP,"$(user):Tfrigo.VAL NMS")
+	field(INP,"$(user):Tfrigo.VAL")
 	field(ALG,"Circular Buffer")
 	field(NSAM,"30")
 	field(FLNK,"$(user):TAverage")
