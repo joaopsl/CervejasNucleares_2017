@@ -130,7 +130,7 @@ record(ao, "$(user):Kp"){
          field(DESC, "constante de Kp de PID")
 	 field(HOPR, "1000")
 	 field(LOPR, "-1000")
-  	 field(VAL, "10.0")
+  	 field(VAL, "-10.0")
 	 field(PREC, "2")
   	 field(PINI, "YES")
 	 field(ASG, "critical")
