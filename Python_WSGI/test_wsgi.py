@@ -25,7 +25,7 @@ def application(environ,start_response):
            'Outside: ' + str(value3)+ ' Deg\n' \
            '</div>\n' \
 	   '<div style="width: 100%; font-size: 20px; text-align: center;">\n' \
-            str(ctime())+'\n' \
+            ctime()+'\n' \
            '</body>\n' \
            '</html>\n'
     response_header = [('Content-type','text/html')]
