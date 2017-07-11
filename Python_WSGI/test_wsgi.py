@@ -20,10 +20,13 @@ def application(environ,start_response):
            '</div>\n' \
            '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
            'Beer: ' + str(value)+ ' Deg\n' \
+           '</div>\n' \	   
 	   '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
            'Fridge: ' + str(value2)+ ' Deg\n' \
+           '</div>\n' \		
 	   '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
            'Outside: ' + str(value3)+ ' Deg\n' \
+           '</div>\n' \
 	   '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
             str(time) + '\n' \
            '</div>\n' \
