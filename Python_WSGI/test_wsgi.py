@@ -1,13 +1,12 @@
 import epics
 
-from time import *
+import time
 
 def application(environ,start_response):
     value  = epics.caget('BeerPi:Tbeer')
     value2 = epics.caget('BeerPi:Tfrigo')
     value3 = epics.caget('BeerPi:Text')
-    time = ctime()
-
+    now = time.ctime()
     status = '200 OK'
     html = '<html>\n' \
 	   '<head>' \
@@ -16,21 +15,19 @@ def application(environ,start_response):
     	   '</head>\n' \
            '<body>\n' \
            '<div style="width: 100%; font-size: 40px; font-weight: bold; text-align: center;">\n' \
-           'BeerPi Project Real-time Temperatures:\n' \
+           'BeerPi Project in Real-Time:\n' \
            '</div>\n' \
            '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
-           'Beer: ' + str(value)+ ' Deg\n' \
+           'Beer Temperature: ' + str(value)+ ' Deg\n' \
 	   '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
-           'Fridge: ' + str(value2)+ ' Deg\n' \
+           'Fridge Temperature: ' + str(value2)+ ' Deg\n' \
 	   '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
-           'Outside: ' + str(value3)+ ' Deg\n' \
+           'Outside Temperature: ' + str(value3)+ ' Deg\n' \
+	   '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
+            'Current Time: ' +now+ '\n' \
            '</div>\n' \
-	   '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
-            time \
            '</body>\n' \
            '</html>\n'
     response_header = [('Content-type','text/html')]
     start_response(status,response_header)
     return [html]
-
-

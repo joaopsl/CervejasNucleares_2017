@@ -155,7 +155,7 @@ void loop (void) {
   // onTime defines for how much time of one hour it is on
   if (currentTime - prevTime2 > onTime) {
 
-    if (RELE_state == 1) {
+    if (RELE_state == 1 && onTime != period) {
       digitalWrite(LED_BUILTIN, LOW);
       digitalWrite(RELE, LOW); // Rele is off when pin is HIGH
      
