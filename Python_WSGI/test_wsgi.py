@@ -17,13 +17,10 @@ def application(environ,start_response):
            '<body>\n' \
            '<div style="width: 100%; font-size: 40px; font-weight: bold; text-align: center;">\n' \
            'BeerPi Project Real-time Temperatures:\n' \
-           '</div>\n' \
            '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
-           'Beer: ' + str(value)+ ' Deg\n' \
-           '</div>\n' \	   
+           'Beer: ' + str(value)+ ' Deg\n' \   
 	   '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
-           'Fridge: ' + str(value2)+ ' Deg\n' \
-           '</div>\n' \		
+           'Fridge: ' + str(value2)+ ' Deg\n' \		
 	   '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
            'Outside: ' + str(value3)+ ' Deg\n' \
            '</div>\n' \
