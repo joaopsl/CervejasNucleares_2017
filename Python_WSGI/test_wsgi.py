@@ -1,5 +1,7 @@
 import epics
 
+import time
+
 def application(environ,start_response):
     value  = epics.caget('BeerPi:Tbeer')
     value2 = epics.caget('BeerPi:Tfrigo')
@@ -12,7 +14,7 @@ def application(environ,start_response):
     	   '</head>\n' \
            '<body>\n' \
            '<div style="width: 100%; font-size: 40px; font-weight: bold; text-align: center;">\n' \
-           'mod_wsgi Test Page:\n' \
+           'BeerPi Project in Real-Time:\n' \
            '</div>\n' \
            '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
            'Beer Temperature: ' + str(value)+ ' Deg\n' \
