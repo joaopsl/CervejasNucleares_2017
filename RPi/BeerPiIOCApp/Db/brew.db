@@ -58,7 +58,7 @@ record(longout, "$(user):DutyCycle"){
   	field(DRVL,"100")
   	field(LOPR, "0")
   	field(HOPR, "1000")
-  	field(VAL, "500")
+  	field(VAL, "200")
   	field(PINI, "YES")
 	field(OMSL, "supervisory") 
 	field(DOL,  "$(user):CalcPID NPP NMS")
@@ -85,6 +85,7 @@ record(longout, "$(user):Period"){
 record(ao, "$(user):Tref"){
   	field(DESC,"Temp  Referencia")
   	field(EGU,"DegC")
+	field(PREC, "2")
   	field(LOPR, "5")
   	field(HOPR, "25")
   	field(VAL, "18")
@@ -106,13 +107,13 @@ record(bi, "$(user):Relay"){
 
 record(calc, "$(user):Terror"){
  	field(DESC, "calculo do erro")
-#	field(SCAN,"10 second")
 	field(FLNK, "$(user):CalcInt")
  	field(CALC, "A-B")
  	field(INPA, "$(user):Tref.VAL  NPP NMS")
   	field(INPB, "$(user):Tbeer.VAL  NPP NMS")
   	field(EGU, "DegC")
 	field(ADEL, "0.05")
+	field(PREC, "2")
 	field(LOLO, "17")
         field(LOW, "17.5")
         field(HIGH, "18.5")
@@ -127,21 +128,26 @@ record(calc, "$(user):CalcInt"){
         field(INPB, "$(user):Terror.VAL")
 #        field(INPC, "$(user):Period.VAL")
         field(INPC, "2")
+	field(PREC, "2")
         field(EGU, "DegC")
 	field(ADEL, "1")
 }
  
- record(ao, "$(user):Kp"){
+record(ao, "$(user):Kp"){
          field(DESC, "constante de Kp de PID")
 	 field(HOPR, "100")
 	 field(LOPR, "-100")
+  	 field(VAL, "0.0")
+  	 field(PINI, "YES")
 	 field(ASG, "critical")
 }
  
- record(ao, "$(user):Ki"){
+record(ao, "$(user):Ki"){
          field(DESC, "constante de integral de PID")  
 	 field(HOPR, "100")
 	 field(LOPR, "-100")
+  	 field(VAL, "0.0")
+  	 field(PINI, "YES")
 	 field(ASG, "critical")
 }
 
@@ -152,12 +158,11 @@ record(calc, "$(user):CalcPID"){
         field(INPB, "$(user):Terror.VAL NMS ")
         field(INPC, "$(user):Ki.VAL NMS ")
 	field(INPD, "$(user):CalcInt.VAL NMS")
-	field(INPE, "500")
+	field(INPE, "200")
 	field(FLNK, "$(user):DutyCycle PP NMS")
 	#field(DRVL, "0")
 	#field(DRVH,"1000")
 	field(ADEL, "1")
-
 }
 
 record(calcout, "$(user):ResetCycle"){
@@ -179,7 +184,7 @@ record(compress, "$(user):TAverage"){
 	field(NSAM,"1")
 	field(EGU,"DegC")
 	field(HOPR,"25")
-	field(LOPR,"0")
+	field(LOPR,"10")
 	field(PREC, "2")
 }
 
