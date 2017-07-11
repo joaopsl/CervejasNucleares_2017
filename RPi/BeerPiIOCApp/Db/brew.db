@@ -82,7 +82,7 @@ record(ao, "$(user):Tref"){
 	field(PREC, "2")
   	field(LOPR, "5")
   	field(HOPR, "25")
-  	field(VAL, "18")
+  	field(VAL, "18.5")
   	field(PINI, "YES")
 	field(ASG, "critical")
 	field(ADEL, "0.1")
@@ -128,9 +128,9 @@ record(calc, "$(user):CalcInt"){
  
 record(ao, "$(user):Kp"){
          field(DESC, "constante de Kp de PID")
-	 field(HOPR, "1000")
+	 field(HOPR, "10")
 	 field(LOPR, "-1000")
-  	 field(VAL, "-10.0")
+  	 field(VAL, "-100.0")
 	 field(PREC, "2")
   	 field(PINI, "YES")
 	 field(ASG, "critical")
@@ -138,7 +138,7 @@ record(ao, "$(user):Kp"){
  
 record(ao, "$(user):Ki"){
          field(DESC, "constante de integral de PID")  
-	 field(HOPR, "1000")
+	 field(HOPR, "10")
 	 field(LOPR, "-1000")
   	 field(VAL, "0.0")
 	 field(PREC, "2")
@@ -146,16 +146,26 @@ record(ao, "$(user):Ki"){
 	 field(ASG, "critical")
 }
 
+record(ao, "$(user):DCzero"){
+  	field(DESC,"DutyCycle Equilibrio")
+  	field(EGU,"o/oo")
+	field(PREC, "0")
+  	field(LOPR, "0")
+  	field(HOPR, "1000")
+  	field(VAL, "250")
+  	field(PINI, "YES")
+	field(ASG, "critical")
+	field(ADEL, "1")
+}
+
 record(calc, "$(user):CalcPID"){
         field(DESC, "calcula o valor do atuador") 
         field(CALC, "A*B + C*D + E")
-#  	field(SCAN, "2 second")
         field(INPA, "$(user):Kp.VAL NPP  NMS")
         field(INPB, "$(user):Terror.VAL NPP NMS")
         field(INPC, "$(user):Ki.VAL NPP NMS")
 	field(INPD, "$(user):CalcInt.VAL PP NMS")
-	field(INPE, "200")
-#	field(FLNK, "$(user):DutyCycle PP NMS")
+	field(INPE, "$(user):DCzero.VAL NPP  NMS")
 	#field(DRVL, "0")
 	#field(DRVH, "1000")
 	field(ADEL,  "1")
@@ -163,9 +173,10 @@ record(calc, "$(user):CalcPID"){
 record(calc, "$(user):LimitPID"){
         field(DESC, "Limita o Valor do atuador") 
   	field(SCAN, "2 second")
-        field(CALC, "(A<B)? 0: A")
+        field(CALC, "(A<B)? 0: ((A>C)? 1000: A)")
 	field(INPA, "$(user):CalcPID.VAL PP NMS")
 	field(INPB, "100")
+	field(INPC, "900")
 	field(FLNK, "$(user):DutyCycle")
 	#field(DRVL, "0")
 }
@@ -192,13 +203,11 @@ record(bo, "$(user):ResetCycle"){
 
 	field(DESC, "Recomeça um ciclo")
 	field(DTYP, "stream")
-#	field(CALC, "0")
 	field(OUT, "@arduino.proto reset() $(PORT)")
 	field(ASG, "critical")
   	field(ZNAM, "OFF")
   	field(ONAM, "ON")
 	field(VAL, "0")
-#	field(OOPT, "On Change")
 }
 
 record(compress, "$(user):TAverage"){
