@@ -6,6 +6,7 @@ def application(environ,start_response):
     value  = epics.caget('BeerPi:Tbeer')
     value2 = epics.caget('BeerPi:Tfrigo')
     value3 = epics.caget('BeerPi:Text')
+    time = ctime()
 
     status = '200 OK'
     html = '<html>\n' \
@@ -23,6 +24,8 @@ def application(environ,start_response):
            'Fridge: ' + str(value2)+ ' Deg\n' \
 	   '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
            'Outside: ' + str(value3)+ ' Deg\n' \
+	   '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
+            str(time) + '\n' \
            '</div>\n' \
            '</body>\n' \
            '</html>\n'
