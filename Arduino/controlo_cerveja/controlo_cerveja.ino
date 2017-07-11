@@ -1,6 +1,3 @@
-/***************** TODO ******************/
-/*        RELE ESTÁ LIGADO A LOW         */
-
 #include <OneWire.h>
 #include <DallasTemperature.h>
 
@@ -16,12 +13,11 @@
 // Temperature is measured every 1000 milliseconds
 #define TEMP_INTERVAL 1000
 
-// Period is 60 minutes by default
-// #define DEFAULT_PERIOD 3600000
+// Period is 30 seconds by default
 #define DEFAULT_PERIOD 30000
- 
-// Rele is on for 10% of the period by default
-#define DEFAULT_ON_TIME 0.1*DEFAULT_PERIOD
+
+// Rele is on for the period by default
+#define DEFAULT_ON_TIME DEFAULT_PERIOD
 
 // Setup a OneWire instance to communicate with any OneWire devices
 OneWire oneWire(ONE_WIRE_BUS);
@@ -46,6 +42,7 @@ unsigned long onTime = DEFAULT_ON_TIME;
 unsigned long onTime_next = DEFAULT_ON_TIME;
 unsigned long period = DEFAULT_PERIOD;
 unsigned long period_next = DEFAULT_PERIOD;
+bool overwrite;
 
 void setup (void) {
   // Start serial port
@@ -76,20 +73,20 @@ void setup (void) {
 void serial_protocol() {
   while (Serial.available() > 0) {
     char lastRecvd = Serial.read();
-
+    
     // if end of message has arrived
     if (lastRecvd == '\n') {
       switch (input[0]) {
         // Request for temperature readout
         case 'T':
             Serial.print("T1=");
-            Serial.print(temperatura0);
+            Serial.print(temperatura2);
             Serial.print(", ");
             Serial.print("T2=");
             Serial.print(temperatura1);
             Serial.print(", ");
             Serial.print("T3=");
-            Serial.print(temperatura2);
+            Serial.print(temperatura0);
             Serial.print(", ");
             Serial.print("S=");
             Serial.print(String(RELE_state));
@@ -112,10 +109,16 @@ void serial_protocol() {
 
           // if new on time is between 0 and 1000
           if (input.toInt() >= 0 && input.toInt() <= 1000) {
-            //onTime_next = (input.toInt()/1000)*period;
             onTime_next = input.toInt();
           }
           
+          input = "";
+          
+          break;
+        
+        // Overwrite
+        case 'O':
+          overwrite = 1;
           input = "";
           break;
           
@@ -123,7 +126,7 @@ void serial_protocol() {
           input = "";
           break;
       }
-    } else {
+     } else {
       input += lastRecvd;
     }
   }
@@ -147,34 +150,24 @@ void loop (void) {
     temperatura1 = sensors.getTempCByIndex(1);
     temperatura2 = sensors.getTempCByIndex(2);
   }
-
+  
   // Control of rele
   // onTime defines for how much time of one hour it is on
   if (currentTime - prevTime2 > onTime) {
 
     if (RELE_state == 1) {
       digitalWrite(LED_BUILTIN, LOW);
-      digitalWrite(RELE, HIGH); // Rele is off when pin is HIGH
-//      Serial.print("desliguei: currentTime: ");
-//      Serial.print(currentTime/1000);
-//      Serial.print(" period: ");
-//      Serial.print(period/1000);
-//      Serial.print(" duty cycle: ");
-//      Serial.print(onTime/1000);
-//      Serial.print("\r\n");
-      
+      digitalWrite(RELE, LOW); // Rele is off when pin is HIGH
+     
       RELE_state = 0;
     }
 
     // If period has passed, update onTime for the next hour
-    if (currentTime - prevTime2 > period) {
+    if (currentTime - prevTime2 > period || overwrite == 1) {
       prevTime2 = currentTime;
 
       if (onTime_next != onTime) {
         onTime = (onTime_next*period)/1000;
-//        Serial.print("actualizei o onTime: ");
-//        Serial.print(onTime/1000);
-//        Serial.print("\r\n");
       }
 
       // Change time to adapt to next period
@@ -183,26 +176,33 @@ void loop (void) {
         period = period_next;
         onTime = (onTime*period)/1000; // Convert back to milliseconds mantaining the proportions
         onTime_next = onTime;
-//        Serial.print("actualizei o periodo: ");
-//        Serial.print(period/1000);
-//        Serial.print(" actualizei o onTime: ");
-//        Serial.print(onTime/1000);
-//        Serial.print("\r\n");
       }
+
+      overwrite = 0;
     }
     
   } else {
+    if (overwrite == 1) {
+      prevTime2 = currentTime;
+
+      if (onTime_next != onTime) {
+        onTime = (onTime_next*period)/1000;
+      }
+
+      // Change time to adapt to next period
+      if (period_next != period) {
+        onTime = (onTime*1000)/period; // Convert to permillage
+        period = period_next;
+        onTime = (onTime*period)/1000; // Convert back to milliseconds mantaining the proportions
+        onTime_next = onTime;
+      }
+      
+      overwrite = 0; 
+    }
     
     if (RELE_state == 0) {
       digitalWrite(LED_BUILTIN, HIGH);
-      digitalWrite(RELE, LOW); // Rele is on when pin is LOW
-//      Serial.print("liguei: currentTime: ");
-//      Serial.print(currentTime/1000);
-//      Serial.print(" period: ");
-//      Serial.print(period/1000);
-//      Serial.print(" duty cycle: ");
-//      Serial.print(onTime/1000);
-//      Serial.print("\r\n");
+      digitalWrite(RELE, HIGH); // Rele is on when pin is LOW
       RELE_state = 1;
     }
   }
