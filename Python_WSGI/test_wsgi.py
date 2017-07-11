@@ -25,7 +25,7 @@ def application(environ,start_response):
 	   '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
            'Outside: ' + str(value3)+ ' Deg\n' \
 	   '<div style="width: 100%; font-size: 30px; font-weight: bold; text-align: center;">\n' \
-            time \
+            str(time) + '\n' \
            '</div>\n' \
            '</body>\n' \
            '</html>\n'
