@@ -4,11 +4,11 @@ import epics
 
 server=smtplib.SMTP('smtp.gmail.com',587)
 
-Tbeer_min = 17.5
-Tbeer_max = 19.5
-
 while(1)
     Tbeer  = epics.caget('BeerPi:Tbeer')
+    Tref = epics.caget('BeerPi:Tref')
+    Tbeer_min = Tref - 1.5
+    Tbeer_max = Tref + 1.5
     if Tbeer>Tbeer_max or Tbeer<Tbeer_min:
         try:
             server.ehlo()
