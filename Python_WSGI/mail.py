@@ -33,6 +33,6 @@ while True:
             server.sendmail("cervejasnucleares2017@gmail.com","henriquegs96@hotmail.com", msg)
         except:
             print "Falha no Envio"
-        #time.sleep(3*3600)
+        time.sleep(3*3600)
     else:
         time.sleep(60)
