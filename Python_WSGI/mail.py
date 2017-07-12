@@ -1,15 +1,18 @@
 import smtplib
-import sleep
+import time
 import epics
 
 server=smtplib.SMTP('smtp.gmail.com',587)
 
-while(1)
+while True:
+    send = 0
     Tbeer  = epics.caget('BeerPi:Tbeer')
     Tref = epics.caget('BeerPi:Tref')
     Tbeer_min = Tref - 1.5
     Tbeer_max = Tref + 1.5
-    if Tbeer>Tbeer_max or Tbeer<Tbeer_min:
+    if Tbeer>Tbeer_max:
+	send = 1
+	msg = "WARNING: Beer temperature is too high! Current value: %f DegC
         try:
             server.ehlo()
             server.starttls()
@@ -20,5 +23,5 @@ while(1)
             print "Mail enviado"
         except:
             print "Falha no Envio"
-    print Tbeer + 'DegC'
-    sleep(30)
+    print '%f DegC' %Tbeer
+    time.sleep(60)
