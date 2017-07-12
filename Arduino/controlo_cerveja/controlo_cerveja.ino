@@ -14,10 +14,10 @@
 #define TEMP_INTERVAL 1000
 
 // Period is 30 seconds by default
-#define DEFAULT_PERIOD 30000
+#define DEFAULT_PERIOD 1800000
 
 // Rele is on for the period by default
-#define DEFAULT_ON_TIME DEFAULT_PERIOD
+#define DEFAULT_ON_TIME 0.25*DEFAULT_PERIOD
 
 // Setup a OneWire instance to communicate with any OneWire devices
 OneWire oneWire(ONE_WIRE_BUS);
