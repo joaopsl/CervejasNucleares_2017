@@ -208,8 +208,8 @@ void loop (void) {
       }
     }
   } else {
-    period = 1800000;
-    onTime = 0.25 * period;
+    period_next = 1800000;
+    onTime_next = 0.25 * period;
     prevTime3 = currentTime;
   }
 }
