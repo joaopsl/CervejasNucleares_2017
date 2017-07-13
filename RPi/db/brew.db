@@ -117,7 +117,7 @@ record(calc, "$(user):CalcInt"){
         field(INPA, "$(user):CalcInt.VAL  NPP NMS")
         field(INPB, "$(user):Terror.VAL PP NMS")
 #        field(INPC, "$(user):Period.VAL")
-        field(INPC, "2")
+        field(INPC, "5")
 	field(PREC, "2")
         field(EGU, "DegC.s")
 	field(ADEL, "1")
@@ -169,7 +169,7 @@ record(calc, "$(user):CalcPID"){
 }
 record(calc, "$(user):LimitPID"){
         field(DESC, "Limita o Valor do atuador") 
-  	field(SCAN, "2 second")
+  	field(SCAN, "5 second")
         field(CALC, "(A<B)? 0: ((A>C)? 1000: A)")
 	field(INPA, "$(user):CalcPID.VAL PP NMS")
 	field(INPB, "100")
