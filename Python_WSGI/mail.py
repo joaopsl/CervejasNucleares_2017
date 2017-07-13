@@ -30,9 +30,10 @@ while True:
             server.starttls()
             server.ehlo
             server.login("cervejasnucleares2017@gmail.com","fermentacao2017")
-            server.sendmail("cervejasnucleares2017@gmail.com","henriquegs96@hotmail.com", msg)
+            server.sendmail("cervejasnucleares2017@gmail.com","bernardo.brotas@gmail.com", msg)
         except:
             print "Falha no Envio"
         time.sleep(3*3600)
     else:
+	print "OK. Tbeer = %f" %Tbeer
         time.sleep(60)
