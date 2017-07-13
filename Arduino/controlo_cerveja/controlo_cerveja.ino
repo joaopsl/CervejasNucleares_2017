@@ -38,6 +38,7 @@ float temperatura2;
 bool RELE_state = 0; // Rele state
 unsigned long prevTime; // Last time the temperature was updated
 unsigned long prevTime2; // Last time the rele was updated
+unsigned long prevTime3; // Last time an instruction was received from Pi
 unsigned long onTime = DEFAULT_ON_TIME;
 unsigned long onTime_next = DEFAULT_ON_TIME;
 unsigned long period = DEFAULT_PERIOD;
@@ -113,7 +114,6 @@ void serial_protocol() {
           }
           
           input = "";
-          
           break;
         
         // Overwrite
@@ -150,61 +150,67 @@ void loop (void) {
     temperatura1 = sensors.getTempCByIndex(1);
     temperatura2 = sensors.getTempCByIndex(2);
   }
-  
+
   // Control of rele
   // onTime defines for how much time of one hour it is on
-  if (currentTime - prevTime2 > onTime) {
-
-    if (RELE_state == 1 && onTime != period) {
-      digitalWrite(LED_BUILTIN, LOW);
-      digitalWrite(RELE, LOW); // Rele is off when pin is HIGH
-     
-      RELE_state = 0;
-    }
-
-    // If period has passed, update onTime for the next hour
-    if (currentTime - prevTime2 > period || overwrite == 1) {
-      prevTime2 = currentTime;
-
-      if (onTime_next != onTime) {
-        onTime = (onTime_next*period)/1000;
+  if (currentTime - prevTime3 < 120000) {
+    if (currentTime - prevTime2 > onTime) {
+  
+      if (RELE_state == 1 && onTime != period) {
+        digitalWrite(LED_BUILTIN, LOW);
+        digitalWrite(RELE, LOW); // Rele is off when pin is HIGH
+       
+        RELE_state = 0;
       }
-
-      // Change time to adapt to next period
-      if (period_next != period) {
-        onTime = (onTime*1000)/period; // Convert to permillage
-        period = period_next;
-        onTime = (onTime*period)/1000; // Convert back to milliseconds mantaining the proportions
-        onTime_next = onTime;
-      }
-
-      overwrite = 0;
-    }
-    
-  } else {
-    if (overwrite == 1) {
-      prevTime2 = currentTime;
-
-      if (onTime_next != onTime) {
-        onTime = (onTime_next*period)/1000;
-      }
-
-      // Change time to adapt to next period
-      if (period_next != period) {
-        onTime = (onTime*1000)/period; // Convert to permillage
-        period = period_next;
-        onTime = (onTime*period)/1000; // Convert back to milliseconds mantaining the proportions
-        onTime_next = onTime;
+  
+      // If period has passed, update onTime for the next hour
+      if (currentTime - prevTime2 > period || overwrite == 1) {
+        prevTime2 = currentTime;
+  
+        if (onTime_next != onTime) {
+          onTime = (onTime_next*period)/1000;
+        }
+  
+        // Change time to adapt to next period
+        if (period_next != period) {
+          onTime = (onTime*1000)/period; // Convert to permillage
+          period = period_next;
+          onTime = (onTime*period)/1000; // Convert back to milliseconds mantaining the proportions
+          onTime_next = onTime;
+        }
+  
+        overwrite = 0;
       }
       
-      overwrite = 0; 
+    } else {
+      if (overwrite == 1) {
+        prevTime2 = currentTime;
+  
+        if (onTime_next != onTime) {
+          onTime = (onTime_next*period)/1000;
+        }
+  
+        // Change time to adapt to next period
+        if (period_next != period) {
+          onTime = (onTime*1000)/period; // Convert to permillage
+          period = period_next;
+          onTime = (onTime*period)/1000; // Convert back to milliseconds mantaining the proportions
+          onTime_next = onTime;
+        }
+        
+        overwrite = 0; 
+      }
+      
+      if (RELE_state == 0) {
+        digitalWrite(LED_BUILTIN, HIGH);
+        digitalWrite(RELE, HIGH); // Rele is on when pin is LOW
+        RELE_state = 1;
+      }
     }
-    
-    if (RELE_state == 0) {
-      digitalWrite(LED_BUILTIN, HIGH);
-      digitalWrite(RELE, HIGH); // Rele is on when pin is LOW
-      RELE_state = 1;
-    }
+  } else {
+    period = 1800000;
+    onTime = 0.25 * period;
+    prevTime3 = currentTime;
   }
 }
 
