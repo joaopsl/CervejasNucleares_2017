@@ -22,11 +22,11 @@ while True:
         Tbeer_min = Tref  - 1.5
         Tbeer_max = Tref  + 1.5
 
-    if Tbeer>Tbeer_max and send == 0:
+    if Tbeer > Tbeer_max and send == 0:
         send = 3
         msg = "Beer temperature is too high! Current value: %f DegC is %f DegC above the reference value. " %(Tbeer,Tbeer-Tref)
 
-    if Tbeer<Tbeer_min and send == 0:
+    if Tbeer < Tbeer_min and send == 0:
         send = 4
         msg = "Beer temperature is too low! Current value: %f DegC is %f DegC below the reference value. " %(Tbeer,Tref-Tbeer)
 
@@ -49,7 +49,8 @@ while True:
             server.ehlo
             server.login("cervejasnucleares2017@gmail.com","fermentacao2017")
             server.sendmail("cervejasnucleares2017@gmail.com","bernardo.brotas@gmail.com", msg)
+	    print "Send sucessful."
         except:
-            print "Falha no Envio"
+            print "Falha no Envio!"
 
     time.sleep(60)
