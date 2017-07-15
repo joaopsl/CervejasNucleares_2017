@@ -1,0 +1,9 @@
+MODELAÇÃO E SIMULAÇÃO
+
+Com os dados recolhidos da temperatura do balde (com água), tentámos modelar o sistema e controlá-lo com um controlador PID.
+
+Os dados recolhidos não foram suficientes para modelar corretamente o sistema, uma vez que estes não contemplam o comportamento até ao sistema estabilizar. Deste modo, a função de transferência obtida não pôde ser usada no controlo da temperatura.
+
+A função de transferência (tempo contínuo) foi obtida com recurso a uma toolbox de identificação de sistemas do Matlab, em que fornecemos os dados relativos ao arrefecimento (escalão de potência máxima do frigorífico).
+
+Foi implementado o controlo em malha fechada, usando um controlador PID (incluindo anti-windup). Para determinar os coeficientes do PID, foi usada uma toolbox do Matlab, no próprio Simulink.
