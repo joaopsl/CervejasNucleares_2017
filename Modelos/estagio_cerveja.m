@@ -2,50 +2,19 @@
 
 clear all;
 
-% constants
-Ts = 1;
-
-% import data
-
+% dados obtidos com potência máxima (supomos que seja 100W)
 data = read_csv('Teste_balde_3.csv');
 
+% temperatura do balde
 beer = data.beer;
-fridge = data.fridge;
-sala = data.sala;
 
-% modelo aquecimento
+% entrada do sistema (step de 100W)
+pot_in = (100*ones(8380,1));
+pot_in(1) = 0;
 
-Phi = [beer(8925:end-1)-fridge(8925:end-1) beer(8925:end-1)];
-Y = beer(8926:end);
+% resposta do sistema (apenas parte do arrefecimento)
+beer_out = beer(1:8380);
 
-Theta = inv(Phi'*Phi)*Phi'*Y;
-
-K_loss = -Theta(1)/Ts;
-
-% modelo arrefecimento
-
-Phi = [beer(1:8925-1)-fridge(1:8925-1) beer(1:8925-1)];
-Y = beer(2:8925);
-
-Theta = inv(Phi'*Phi)*Phi'*Y;
-
-K_loss_a = -Theta(1)/Ts;
-
-% arrefecimento
-% t=1:14477;
-% p = polyfit(t',fridge(1:14477),2);
-% 
-% tf_1 = 25;
-% tf_2 = 18;
-% 
-% arrefece = polyval(p,-15000:20000);
-% 
-% tmp1 = abs(arrefece-tf_1);
-% [idx1 idx1] = min(tmp1);
-% closest1 = arrefece(idx1);
-% 
-% tmp2 = abs(arrefece-tf_2);
-% [idx2 idx2] = min(tmp2);
-% closest2 = arrefece(idx2);
-% 
-% delta = (idx2-idx1)*10.5;
+% função de transferência (obtida com toolbox de identificação de sistemas)
+tf = load('tf.mat');
+tr_funct = tf.tf1;
