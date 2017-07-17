@@ -153,7 +153,6 @@ void loop (void) {
 
   // Control of rele
   // onTime defines for how much time of one hour it is on
-  if (currentTime - prevTime3 < 120000) {
     if (currentTime - prevTime2 > onTime) {
   
       if (RELE_state == 1 && onTime != period) {
@@ -207,10 +206,5 @@ void loop (void) {
         RELE_state = 1;
       }
     }
-  } else {
-    period_next = 1800000;
-    onTime_next = 0.25 * period;
-    prevTime3 = currentTime;
-  }
 }
 
